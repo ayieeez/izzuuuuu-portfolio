@@ -596,6 +596,22 @@
     transform-style: preserve-3d;
   }
 
+  /* Circular expansion overlay - exclude from theme transitions */
+  .theme-circle-overlay {
+    transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                height 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    will-change: width, height !important;
+    backface-visibility: hidden !important;
+    -webkit-backface-visibility: hidden !important;
+  }
+
+  /* Exclude circular overlay from theme transition effects */
+  .theme-transitioning .theme-circle-overlay {
+    animation: none !important;
+    transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                height 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  }
+
   /* Enhanced theme transition for all elements */
   * {
     transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
@@ -610,7 +626,30 @@
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
 
-  /* Specific transitions for text elements */
+  /* Enhanced fade effect for text during theme transition */
+  .theme-transitioning {
+    animation: theme-fade-transition 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes theme-fade-transition {
+    0% {
+      opacity: 1;
+    }
+    25% {
+      opacity: 0.7;
+    }
+    50% {
+      opacity: 0.4;
+    }
+    75% {
+      opacity: 0.7;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  /* Specific transitions for text elements with fade effect */
   .theme-transitioning h1,
   .theme-transitioning h2,
   .theme-transitioning h3,
@@ -622,9 +661,33 @@
   .theme-transitioning div,
   .theme-transitioning button,
   .theme-transitioning a {
-    transition-property: color, background-color !important;
+    transition-property: color, background-color, opacity !important;
     transition-duration: 0.6s !important;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+    animation: text-fade-smooth 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes text-fade-smooth {
+    0% {
+      opacity: 1;
+      filter: blur(0px);
+    }
+    30% {
+      opacity: 0.6;
+      filter: blur(1px);
+    }
+    60% {
+      opacity: 0.3;
+      filter: blur(2px);
+    }
+    80% {
+      opacity: 0.8;
+      filter: blur(0.5px);
+    }
+    100% {
+      opacity: 1;
+      filter: blur(0px);
+    }
   }
 
   /* SVG elements smooth transition */
@@ -633,5 +696,37 @@
     transition-property: fill, stroke !important;
     transition-duration: 0.6s !important;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+
+  /* Prevent layout shift during theme transition */
+  .theme-transitioning * {
+    will-change: color, background-color, opacity;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* Special handling for interactive elements */
+  .theme-transitioning button:not(.theme-toggle),
+  .theme-transitioning a:not(.theme-toggle) {
+    animation: interactive-fade-smooth 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes interactive-fade-smooth {
+    0% {
+      opacity: 1;
+      transform: translateY(0px);
+    }
+    40% {
+      opacity: 0.5;
+      transform: translateY(-2px);
+    }
+    70% {
+      opacity: 0.7;
+      transform: translateY(1px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0px);
+    }
   }
 }

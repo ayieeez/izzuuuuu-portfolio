@@ -16,6 +16,9 @@ export function ThemeToggle() {
   const handleThemeChange = (event: React.MouseEvent<HTMLButtonElement>) => {
     setIsAnimating(true)
     
+    // Add fade-out effect to all text elements
+    document.documentElement.classList.add('theme-transitioning')
+    
     // Get button position for origin point
     const rect = event.currentTarget.getBoundingClientRect()
     const x = rect.left + rect.width / 2
@@ -27,7 +30,7 @@ export function ThemeToggle() {
     const wipeElement = document.createElement('div')
     const nextThemeColor = theme === 'light' ? '#000000' : '#ffffff'
     
-    // Set styles directly
+    // Set styles directly with more specific transitions
     wipeElement.style.position = 'fixed'
     wipeElement.style.top = `${y}px`
     wipeElement.style.left = `${x}px`
@@ -38,8 +41,9 @@ export function ThemeToggle() {
     wipeElement.style.zIndex = '999999'
     wipeElement.style.pointerEvents = 'none'
     wipeElement.style.transform = 'translate(-50%, -50%)'
-    wipeElement.style.transition = 'all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-    wipeElement.style.willChange = 'transform'
+    wipeElement.style.transition = 'width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), height 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+    wipeElement.style.willChange = 'width, height'
+    wipeElement.className = 'theme-circle-overlay'
     
     // Add to body
     document.body.appendChild(wipeElement)
@@ -67,6 +71,8 @@ export function ThemeToggle() {
         document.body.removeChild(wipeElement)
         console.log('Element removed') // Debug log
       }
+      // Remove fade effect and reset text opacity
+      document.documentElement.classList.remove('theme-transitioning')
       setIsAnimating(false)
     }, 1200)
   }
